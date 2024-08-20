@@ -60,9 +60,6 @@ db.sqlite3
 db.sqlite3-journal
 staticfiles/
 
-# Flask stuff
-instance/
-.webassets-cache
 
 # Scrapy stuff
 .scrapy
@@ -74,21 +71,12 @@ docs/_build/
 .pybuilder/
 target/
 
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
 # pyenv
 .python-version
 
 # pipenv
 Pipfile.lock
 
-# poetry
-poetry.lock
 
 # pdm
 pdm.lock
