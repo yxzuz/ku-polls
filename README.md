@@ -16,7 +16,7 @@ To be added. If the procedure is long, put it in the wiki or a separate file.
 To be added.
 
 # UI 
-TO be added
+To be added
 
 ## Project Documents
 
