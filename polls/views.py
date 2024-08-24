@@ -1,32 +1,31 @@
 from django.db.models import F
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.views import generic
 
 from .models import Question, Choice
+class IndexView(generic.ListView):
+    """Displays the latest few questions."""
+    template_name = "polls/index.html"
+    # originally, the context name would be question_list
+    context_object_name = "latest_question_list"
 
-def index(request):
-    """displays the latest few questions."""
-    latest_question_list = Question.objects.order_by("-pub_date")[:5]
-    # output = ", ".join([q.question_text for q in latest_question_list])
-    context = {"latest_question_list": latest_question_list}
-    return render(request, "polls/index.html", context)
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Question.objects.order_by("-pub_date")[:5]
 
-def detail(request, question_id):
-    """displays a question text, with no results but with a form to vote"""
+class DetailView(generic.DetailView):
+    """Displays a question text, with no results but with a form to vote"""
+    model = Question
+    template_name = "polls/detail.html"
+    # context var is question
 
-    # try:
-    #     question = Question.objects.get(pk=question_id)
-    # except:  # error
-    #     raise Http404("The Question does not exist")
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, "polls/detail.html", {"question": question})
-
-def results(request, question_id):
-    """displays results for a particular question."""
-    question = get_object_or_404(Question, pk=question_id)
-
-    return render(request, "polls/results.html",{"question": question})
+class ResultsView(generic.DetailView):
+    """Displays results for a particular question."""
+    model = Question
+    template_name = "polls/results.html"
+    # context var is question
 
 def vote(request, question_id):
     """handles voting for a particular choice in a particular question."""
