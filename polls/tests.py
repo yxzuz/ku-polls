@@ -1,3 +1,7 @@
+"""
+This module contains Unittests for the polls application.
+"""
+
 import datetime
 
 from django.test import TestCase
@@ -8,12 +12,13 @@ from .models import Question
 
 
 class QuestionModelTests(TestCase):
+    """Tests for Question Model to make sure that the poll is available at the right time"""
     def test_was_published_recently_with_old_question(self):
         """
         was_published_recently() returns False for questions whose pub_date
         is older than 1 day.
         """
-        test = timezone.now() - datetime.timedelta(days=1,seconds=1)
+        test = timezone.now() - datetime.timedelta(days=1, seconds=1)
         question = Question(pub_date=test)
         self.assertFalse(question.was_published_recently())
 
@@ -47,6 +52,7 @@ def create_question(question_text, days):
 
 
 class QuestionIndexViewTests(TestCase):
+    """Test to check the poll with client environment (no record yet)"""
     def test_no_questions(self):
         """
         If no questions exist, an appropriate message is displayed.
@@ -98,6 +104,10 @@ class QuestionIndexViewTests(TestCase):
 
 
 class QuestionDetailViewTests(TestCase):
+    """
+    Ensure that a question with a future publication date returns a 404 error and
+    a question with a past publication date is accessible and its text is displayed correctly.
+    """
     def test_future_question(self):
         """
         The detail view of a question with a pub_date in the future
