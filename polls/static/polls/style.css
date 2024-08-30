@@ -1,5 +1,17 @@
+h1 {
+    color: #da62be;
+    font-weight: bold;
+    font-size: 80px;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+
+
+}
 li a {
-    color: green;
+    color: purple ;
+    font-size: 45px;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    line-height: 130%
+
 }
 
 body {
