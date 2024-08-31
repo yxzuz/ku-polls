@@ -47,6 +47,7 @@ class DetailView(generic.DetailView):
             context['error_message'] = 'This poll is already closed.'
         elif not question.is_published():
             context['error_message'] = 'This poll is not available.'
+        context['can_vote'] = question.can_vote()
         return context
 
 
