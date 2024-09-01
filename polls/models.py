@@ -9,7 +9,8 @@ from django.utils import timezone
 
 
 class Question(models.Model):
-    """Question Model has two attributes: question_text, pub_date and end_date"""
+    """Question Model has two attributes:
+    question_text, pub_date and end_date"""
     question_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField("date published", default=timezone.now)
     end_date = models.DateTimeField("end date", null=True, blank=True)
@@ -28,16 +29,18 @@ class Question(models.Model):
         If end_date is null then can vote anytime after pub_date.
         """
         if self.end_date is not None:
-            return self.pub_date <= timezone.now() <= self.end_date and self.is_published()
-        return self.end_date is None and self.is_published()  # can vote anytime
-
+            return (self.pub_date <= timezone.now() <= self.end_date
+                    and self.is_published())
+        # can vote anytime
+        return self.end_date is None and self.is_published()
 
     def was_published_recently(self):
         """
         Check whether the publication date is within 24 hrs
         Return Boolean
         """
-        return timezone.now() - datetime.timedelta(days=1) <= self.pub_date <= timezone.now()
+        return (timezone.now() - datetime.timedelta(days=1) <=
+                self.pub_date <= timezone.now())
 
     def __str__(self):
         """Return string representation of Question's model"""

@@ -42,17 +42,18 @@ class DetailView(generic.DetailView):
 
     def get(self, request, *args, **kwargs):
         """
-        Override get method from generic view to can_vote and is_published condition.
-        Then redirect it to index if it's necessary
+        Override get method from generic view to can_vote
+        and is_published condition.Then redirect it to index
+        if it's necessary
         """
         question = self.get_object()
         if not question.can_vote():
             messages.warning(request, "This poll is already closed.")
             return redirect(reverse("polls:index"))
         if not question.is_published():
-            messages.warning(request,'This poll is not available.')
+            messages.warning(request, 'This poll is not available.')
             return redirect(reverse("polls:index"))
-        return super(DetailView, self).get(request,*args, **kwargs)
+        return super(DetailView, self).get(request, *args, **kwargs)
 
 
 class ResultsView(generic.DetailView):
@@ -70,10 +71,12 @@ def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
 
     try:
-        # find the selected choice from form in polls/templates/polls/detail.html
+        # find the selected choice from form
+        # in polls/templates/polls/detail.html
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):  # didn't pick any
-        # Redisplay the question voting form and inform that they didn't select the choice
+        # Redisplay the question voting form
+        # and inform that they didn't select the choice
         context = {
                 "question": question,
                 "error_message": "You didn't select a choice.",
@@ -90,4 +93,3 @@ def vote(request, question_id):
 
     # After voted redirects to the "results" page for the question
     return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
-
