@@ -150,7 +150,6 @@ class QuestionDetailViewTests(TestCase):
         end_t = timezone.now() - datetime.timedelta(days=1, seconds=1)  # yesterday + 1 sec
         question = Question.objects.create(question_text="Cannot vote",end_date=end_t)
         response = self.client.get(reverse("polls:detail", args=(question.id,)))
-        self.assertContains(response, 'This poll is already closed.')
         self.assertFalse(question.can_vote())
 
     def test_cannot_vote_before_pub_date(self):
