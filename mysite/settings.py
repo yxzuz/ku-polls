@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool, default=False)
 SECRET_KEY = config('SECRET_KEY', cast=str, default='fake-secret-key')
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=str, default='localhost,127.0.0.1,testserver')
+ALLOWED_HOSTS = config("ALLOWED_HOSTS",default="localhost").split(",")
 TIME_ZONE = config("TIME_ZONE", cast=str, default="Asia/Bangkok")
 
 
