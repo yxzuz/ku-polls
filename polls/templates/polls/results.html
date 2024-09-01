@@ -5,9 +5,17 @@
 <h1>{{ question.question_text }}</h1>
 
 <ul>
-{% for choice in question.choice_set.all %}
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-{% endfor %}
+    <table bgcolor="#de6eed">
+        {% for choice in question.choice_set.all %}
+        <tr>
+            <td bgcolor="#db94f4">{{choice.choice_text}}</td>
+            <td bgcolor="#ac94f4"> {{ choice.votes }}</td>
+        </tr>
+
+    {% endfor %}
+
+    </table>
+
 </ul>
 
 <a href="{% url 'polls:index' %}">Back to List of Polls</a>

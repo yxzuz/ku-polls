@@ -9,16 +9,29 @@ h1 {
 li a {
     color: purple ;
     font-size: 45px;
-    font-family: "Plus Jakarta Sans", sans-serif;
+    font-family: "M PLUS Rounded 1c", sans-serif;
     line-height: 130%
 
+}
+
+.messages {
+    color: red ;
+    font-size: 23px;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+}
+
+table {
+    color: white ;
+    font-size: 23px;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    line-height: 160%
 }
 
 .choice-text {
     color: #ba62da ;
     font-size: 30px;
-    font-family: "Plus Jakarta Sans", sans-serif;
-    line-height: 16%
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    line-height: 160%
 }
 body {
     background: white url("images/Background.jpg") no-repeat center center fixed;

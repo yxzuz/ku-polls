@@ -17,10 +17,10 @@
         <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
         <a href="{% url 'polls:results' question.id %}"> Voting results</a>
         {% if question.can_vote %}
-            <p>Status: Open</p>
+            <p style="color: #ee59bc; font: M PLUS Rounded 1c">Status: Open</p>
 
         {% else %}
-            <p>Status: Closed</p>
+            <p style="color: red; font: M PLUS Rounded 1c">Status: Closed</p>
         {% endif %}
     {% endfor %}
     </ul>
