@@ -2,10 +2,11 @@
 
 from django.db.models import F
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib import messages
 
 from .models import Question, Choice
 
@@ -39,19 +40,19 @@ class DetailView(generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get the context
-        context = super(DetailView, self).get_context_data(**kwargs)
+    def get(self, request, *args, **kwargs):
+        """
+        Override get method from generic view to can_vote and is_published condition.
+        Then redirect it to index if it's necessary
+        """
         question = self.get_object()
         if not question.can_vote():
-            context['error_message'] = 'This poll is already closed.'
-        elif not question.is_published():
-            context['error_message'] = 'This poll is not available.'
-        context['can_vote'] = question.can_vote()
-        return context
-
-
-
+            messages.warning(request, "This poll is already closed.")
+            return redirect(reverse("polls:index"))
+        if not question.is_published():
+            messages.warning(request,'This poll is not available.')
+            return redirect(reverse("polls:index"))
+        return super(DetailView, self).get(request,*args, **kwargs)
 
 
 class ResultsView(generic.DetailView):
