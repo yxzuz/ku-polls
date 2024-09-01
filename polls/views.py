@@ -2,10 +2,11 @@
 
 from django.db.models import F
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib import messages
 
 from .models import Question, Choice
 
@@ -39,6 +40,21 @@ class DetailView(generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
+    def get(self, request, *args, **kwargs):
+        """
+        Override get method from generic view to can_vote
+        and is_published condition.Then redirect it to index
+        if it's necessary
+        """
+        question = self.get_object()
+        if not question.can_vote():
+            messages.warning(request, "This poll is already closed.")
+            return redirect(reverse("polls:index"))
+        if not question.is_published():
+            messages.warning(request, 'This poll is not available.')
+            return redirect(reverse("polls:index"))
+        return super(DetailView, self).get(request, *args, **kwargs)
+
 
 class ResultsView(generic.DetailView):
     """
@@ -53,23 +69,27 @@ class ResultsView(generic.DetailView):
 def vote(request, question_id):
     """Handles voting for a particular choice in a particular question."""
     question = get_object_or_404(Question, pk=question_id)
+
     try:
-        # find the selected choice from form in polls/templates/polls/detail.html
+        # find the selected choice from form
+        # in polls/templates/polls/detail.html
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):  # didn't pick any
-        # Redisplay the question voting form and inform that they didn't select the choice
+        # Redisplay the question voting form
+        # and inform that they didn't select the choice
         context = {
                 "question": question,
                 "error_message": "You didn't select a choice.",
             }
         # when they search for templates, they already in template dir
+        # only let them vote by some conditions
         return render(request, "polls/detail.html", context)
 
-    selected_choice.votes = F("votes") + 1  # add the vote to database
+    selected_choice.votes = F("votes") + 1  # add the vote to the database
     selected_choice.save()
     # Always return an HttpResponseRedirect after successfully dealing
     # with POST data.This prevents data from being posted twice if a
     # user hits the Back button.
 
-    # After voted redirects to the results page for the question
+    # After voted redirects to the "results" page for the question
     return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
