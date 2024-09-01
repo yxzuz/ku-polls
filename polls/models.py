@@ -28,8 +28,8 @@ class Question(models.Model):
         If end_date is null then can vote anytime after pub_date.
         """
         if self.end_date is not None:
-            return self.pub_date <= timezone.now() <= self.end_date
-        return self.end_date is None
+            return self.pub_date <= timezone.now() <= self.end_date and self.is_published()
+        return self.end_date is None and self.is_published()  # can vote anytime
 
 
     def was_published_recently(self):
