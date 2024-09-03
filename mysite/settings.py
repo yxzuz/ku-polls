@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", cast=bool, default=False)
+DEBUG = config("DEBUG", cast=bool, default=True)
 SECRET_KEY = config('SECRET_KEY', cast=str, default='fake-secret-key')
 ALLOWED_HOSTS = config("ALLOWED_HOSTS",default="localhost,127.0.0.1").split(",")
 TIME_ZONE = config("TIME_ZONE", cast=str, default="Asia/Bangkok")
@@ -56,7 +56,7 @@ ROOT_URLCONF = "mysite.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'],  # <--- global templates
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -100,8 +100,12 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
-
+AUTHENTICATION_BACKENDS = [
+    # username & password authentication
+   'django.contrib.auth.backends.ModelBackend',
+]
+LOGIN_REDIRECT_URL = 'polls:index'  # after login, show list of polls
+LOGOUT_REDIRECT_URL = 'login'       # after logout, return to login page
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
