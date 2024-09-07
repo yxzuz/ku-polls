@@ -6,6 +6,7 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 
 class Question(models.Model):
@@ -51,8 +52,23 @@ class Choice(models.Model):
     """Choice model has three attributes: question, choice_text, and votes"""
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    votes = models.IntegerField(default=0)
+    # votes = models.IntegerField(default=0)
+
+    @property
+    def votes(self):
+        """returns the votes of the choice"""
+        # self.vote_set.count() or
+        return self.vote_set.all().count()
 
     def __str__(self):
         """Return string representation of Choice's model"""
         return str(self.choice_text) if self.choice_text is not None else ''
+
+class Vote(models.Model):
+    """A vote by a user for a choice in a poll"""
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        """Return string representation of Vote's model"""
+        return f'{self.user.username} voted for {self.choice_text}'
