@@ -9,11 +9,11 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-from .models import Question, Choice
+from .models import Question, Choice, Vote
 
 
 class IndexView(generic.ListView):
-    """Take request to index.html which displays the latest few questions."""
+    """Take request to index.html which displays all questions."""
     template_name = "polls/index.html"
     # originally, the context name would be question_list
     context_object_name = "latest_question_list"
@@ -28,8 +28,7 @@ class IndexView(generic.ListView):
 
 class DetailView(generic.DetailView):
     """
-    Take request to detail.html which displays
-    a question text, with no results but with a form to vote
+    Display the choices for a poll and allow voting
     """
     model = Question
     template_name = "polls/detail.html"
@@ -54,7 +53,7 @@ class DetailView(generic.DetailView):
         if not question.is_published():
             messages.warning(request, 'This poll is not available.')
             return redirect(reverse("polls:index"))
-        return super(DetailView, self).get(request, *args, **kwargs)
+        return super(DetailView, self).get(request, *args, **kwargs)  # render the page
 
 
 class ResultsView(generic.DetailView):
@@ -86,11 +85,23 @@ def vote(request, question_id):
         # only let them vote by some conditions
         return render(request, "polls/detail.html", context)
 
-    selected_choice.votes = F("votes") + 1  # add the vote to the database
-    selected_choice.save()
-    # Always return an HttpResponseRedirect after successfully dealing
-    # with POST data.This prevents data from being posted twice if a
-    # user hits the Back button.
+    # Reference to the current user
+    my_user = request.user
+
+    # Get the user's vote
+    try:
+        vote = Vote.objects.get(user=my_user, choice__question=question)
+        # user alr has a vote for this question!! Update his choice.
+        # check wa select same choice mai???
+        if vote.choice.pk != selected_choice.pk:
+            vote.choice = selected_choice
+            vote.save()
+            messages.success(request, f"Your vote was changed to {selected_choice.choice_text}")
+    except Vote.DoesNotExist:
+        # does not have a vote yet
+        # automatically saved
+        Vote.objects.create(user=my_user,choice=selected_choice)
+        messages.success(request,f"You voted for {selected_choice.choice_text}")
 
     # After voted redirects to the "results" page for the question
     return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
