@@ -71,4 +71,4 @@ class Vote(models.Model):
 
     def __str__(self):
         """Return string representation of Vote's model"""
-        return f'{self.user.username} voted for {self.choice_text}'
+        return f'{self.user.username} voted for {self.choice.choice_text}'
