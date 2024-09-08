@@ -1,6 +1,6 @@
 """This module contains views of polls app"""
 
-from django.db.models import F
+import logging
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Question, Choice, Vote
 
+logger = logging.getLogger(__name__)
 
 class IndexView(generic.ListView):
     """Take request to index.html which displays all questions."""
@@ -65,6 +66,7 @@ class ResultsView(generic.DetailView):
     template_name = "polls/results.html"
     # context var is question
 
+
 @login_required
 def vote(request, question_id):
     """Handles voting for a particular choice in a particular question."""
@@ -74,6 +76,7 @@ def vote(request, question_id):
         # find the selected choice from form
         # in polls/templates/polls/detail.html
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
+        logger.info(f"User {request.user} voted for choice id:{request.POST['choice']} in polls {question_id}")
     except (KeyError, Choice.DoesNotExist):  # didn't pick any
         # Redisplay the question voting form
         # and inform that they didn't select the choice
@@ -83,6 +86,7 @@ def vote(request, question_id):
             }
         # when they search for templates, they already in template dir
         # only let them vote by some conditions
+        logger.exception(f"Invalid question id:{question_id} or choice not selected for user: {request.user}")
         return render(request, "polls/detail.html", context)
 
     # Reference to the current user
@@ -91,8 +95,8 @@ def vote(request, question_id):
     # Get the user's vote
     try:
         vote = Vote.objects.get(user=my_user, choice__question=question)
-        # user alr has a vote for this question!! Update his choice.
-        # check wa select same choice mai???
+        # user alr has a vote for this question!Update his choice.
+        # check if select same choice mai???
         if vote.choice.pk != selected_choice.pk:
             vote.choice = selected_choice
             vote.save()
@@ -100,8 +104,8 @@ def vote(request, question_id):
     except Vote.DoesNotExist:
         # does not have a vote yet
         # automatically saved
-        Vote.objects.create(user=my_user,choice=selected_choice)
-        messages.success(request,f"You voted for {selected_choice.choice_text}")
+        Vote.objects.create(user=my_user, choice=selected_choice)
+        messages.success(request, f"You voted for {selected_choice.choice_text}")
 
     # After voted redirects to the "results" page for the question
     return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
