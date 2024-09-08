@@ -1,13 +1,14 @@
 """This module contains views of polls app"""
 
 import logging
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 from django.dispatch import receiver
 
@@ -52,7 +53,7 @@ class IndexView(generic.ListView):
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
 
 
-class DetailView(generic.DetailView):
+class DetailView(LoginRequiredMixin, generic.DetailView):
     """
     Display the choices for a poll and allow voting
     """
@@ -66,19 +67,32 @@ class DetailView(generic.DetailView):
         """
         return Question.objects.filter(pub_date__lte=timezone.now())
 
+
     def get(self, request, *args, **kwargs):
         """
         Override get method from generic view to can_vote
         and is_published condition.Then redirect it to index
         if it's necessary
         """
-        question = self.get_object()
+
+        try:
+            # This will use the default get_queryset filtering
+            question = self.get_object()
+        except Http404:
+            messages.warning(request, "This poll is not available")
+            logger.warning(f"{request.user} tried to access unavailable poll ID {kwargs.get('pk')}")
+            return redirect(reverse("polls:index"))
+            # if not Question.objects.filter(id=question.id):
         if not question.can_vote():
             messages.warning(request, "This poll is already closed.")
+            logger.warning(f"{request.user} tried to access closed poll ID {question.pk}")
             return redirect(reverse("polls:index"))
         if not question.is_published():
             messages.warning(request, 'This poll is not available.')
+            logger.warning(f"{request.user} tried to access future poll ID {question.pk}")
             return redirect(reverse("polls:index"))
+
+
         return super(DetailView, self).get(request, *args, **kwargs)  # render the page
 
     def get_context_data(self, **kwargs):
