@@ -8,7 +8,6 @@ from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
 from django.dispatch import receiver
 
@@ -53,7 +52,7 @@ class IndexView(generic.ListView):
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
 
 
-class DetailView(LoginRequiredMixin, generic.DetailView):
+class DetailView(generic.DetailView):
     """
     Display the choices for a poll and allow voting
     """
@@ -74,7 +73,8 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
         and is_published condition.Then redirect it to index
         if it's necessary
         """
-
+        if not request.user.is_authenticated:
+            return redirect(reverse("login"))
         try:
             # This will use the default get_queryset filtering
             question = self.get_object()
@@ -91,7 +91,6 @@ class DetailView(LoginRequiredMixin, generic.DetailView):
             messages.warning(request, 'This poll is not available.')
             logger.warning(f"{request.user} tried to access future poll ID {question.pk}")
             return redirect(reverse("polls:index"))
-
 
         return super(DetailView, self).get(request, *args, **kwargs)  # render the page
 
