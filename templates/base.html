@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .login {
+            text-align: right;
+            margin: 0;
+            font-family: "M PLUS Rounded 1c", sans-serif;
+            line-height: 160%;
+            color: purple;
+        }
+
+        .content {
+        text-align: left;
+        margin: 0 auto;
+        width: 80%;
+        }
+   </style>
+</head>
+<body>
+<div class="login">
+{% if user.is_authenticated %}
+    Welcome back,  {{user.username}}
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" style="background-color: #d096e3; color: white; border-radius: 15px;border-color: #aa5cc4">Log Out</button>
+</form>
+
+{% else %}
+    Please <a href="{% url 'login' %}?next={{request.path}}">Login</a>
+{% endif %}
+</div>
+<div>
+    {% block content %}
+    {% endblock content %}
+
+</div>
+
+
+</body>
+
+</html>

@@ -1,19 +1,10 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'polls/style.css' %}">
 <body>
+{% block content %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
 <h1>Ku-Polls</h1>
-
-{% if user.is_authenticated %}
-    Welcome back,  {{user.username}}
-    <form action="{% url 'logout' %}" method="post">
-      {% csrf_token %}
-      <button type="submit">Log Out</button>
-</form>
-{% else %}
-    Please <a href="{% url 'login' %}?next={{request.path}}">Login</a>
-{% endif %}
-
 
 {% if messages %}
 <div class="messages">
@@ -24,8 +15,10 @@
 {% endif %}
 
 {% if latest_question_list %}
+<div class="poll_questions">
     <ul>
     {% for question in latest_question_list %}
+        <div class="container">
         <li><a href="{% url 'polls:detail' question.id %}" style="text-decoration:none;">{{ question.question_text }}</a></li>
         <a href="{% url 'polls:results' question.id %}" style="text-decoration:none;"> <button style="background-color: #d096e3; color: white; border-radius: 15px;border-color: #aa5cc4">Voting results</button></a>
 
@@ -35,9 +28,13 @@
         {% else %}
             <p style="color: red; font: M PLUS Rounded 1c">Status: Closed</p>
         {% endif %}
+        </div>
     {% endfor %}
     </ul>
+</div>
+
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+{% endblock content %}
 </body>
