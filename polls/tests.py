@@ -8,7 +8,7 @@ from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 
-from .models import Question
+from .models import Question, User
 
 
 class QuestionModelTests(TestCase):
@@ -126,14 +126,11 @@ class QuestionDetailViewTests(TestCase):
     Ensure that a question with a future publication date returns a 404 error and
     a question with a past publication date is accessible and its text is displayed correctly.
     """
-    def test_future_question(self):
-        """
-        The detail view of a question with a pub_date in the future
-        returns a 404 not found.
-        """
-        question = create_question(question_text="Future question", days=30)
-        response = self.client.get(reverse("polls:detail", args=(question.id,)))
-        self.assertEqual(response.status_code, 404)
+
+    def setUp(self):
+        """Create a user and log them in."""
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.client.login(username='testuser', password='12345')
 
     def test_past_question(self):
         """
@@ -153,11 +150,14 @@ class QuestionDetailViewTests(TestCase):
         self.assertFalse(question.can_vote())
 
     def test_cannot_vote_before_pub_date(self):
-        """Cannot vote if the poll hasn't been published yet"""
+        """
+        The detail view of a question with a pub_date in the future
+        redirects to index.
+        """
         question = create_question(question_text="Future question", days=1)
         response = self.client.get(reverse("polls:detail", args=(question.id,)))
-        self.assertEqual(response.status_code, 404)
-        self.assertFalse(question.can_vote())
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("polls:index"))
 
     def test_can_vote_with_default_pub_date(self):
         """Default pub_date can vote with no end date and with end date"""

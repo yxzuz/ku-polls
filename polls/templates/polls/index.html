@@ -1,5 +1,8 @@
+{% extends 'base.html' %}
 {% load static %}
 
+<body>
+{% block content %}
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 <h1>Ku-Polls</h1>
 
@@ -12,18 +15,26 @@
 {% endif %}
 
 {% if latest_question_list %}
+<div class="poll_questions">
     <ul>
     {% for question in latest_question_list %}
-        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
-        <a href="{% url 'polls:results' question.id %}"> Voting results</a>
+        <div class="container">
+        <li><a href="{% url 'polls:detail' question.id %}" style="text-decoration:none;">{{ question.question_text }}</a></li>
+        <a href="{% url 'polls:results' question.id %}" style="text-decoration:none;"> <button style="background-color: #d096e3; color: white; border-radius: 15px;border-color: #aa5cc4">Voting results</button></a>
+
         {% if question.can_vote %}
             <p style="color: #ee59bc; font: M PLUS Rounded 1c">Status: Open</p>
 
         {% else %}
             <p style="color: red; font: M PLUS Rounded 1c">Status: Closed</p>
         {% endif %}
+        </div>
     {% endfor %}
     </ul>
+</div>
+
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
+{% endblock content %}
+</body>

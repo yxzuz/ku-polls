@@ -1,17 +1,25 @@
+{% extends 'base.html' %}
 {% load static %}
+{% block content %}
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
 <form action="{% url 'polls:vote' question.id %}" method="post">
 {% csrf_token %}
-<fieldset>
+<fieldset style="border: 2px solid #b5438f;">
     <legend><h1>{{ question.question_text }}</h1></legend>
     {% if error_message %}<p style="color: red; font: Plus Jakarta Sans"><strong>{{ error_message }}</strong></p>{% endif %}
     {% for choice in question.choice_set.all %}
-        <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+
+            <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" {% if voted_choice == choice.pk%} checked {% endif %}/>
+
         <label for="choice{{ forloop.counter }}" class="choice-text">{{ choice.choice_text }}</label><br>
+
     {% endfor %}
 </fieldset>
-    <input type="submit" value="Vote">
+    <div class="navigation">
+    <input type="submit" value="Vote" style="background-color: #d096e3; color: white; border-radius: 15px;border-color: #aa5cc4">
     <a href="{% url 'polls:index' %}">Back to List of Polls</a>
     <a href="{% url 'polls:results' question.id %}">Results</a>
+        </div>
 </form>
+{% endblock content %}

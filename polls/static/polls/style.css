@@ -3,6 +3,7 @@ h1 {
     font-weight: bold;
     font-size: 60px;
     font-family: "M PLUS Rounded 1c", sans-serif;
+    text-indent: 30px;
 
 
 }
@@ -10,7 +11,7 @@ li a {
     color: purple ;
     font-size: 45px;
     font-family: "M PLUS Rounded 1c", sans-serif;
-    line-height: 130%
+    line-height: 130%;
 
 }
 
@@ -25,6 +26,9 @@ table {
     font-size: 23px;
     font-family: "M PLUS Rounded 1c", sans-serif;
     line-height: 160%
+    margin-left: auto;
+    margin-right: auto;
+
 }
 
 .choice-text {
@@ -40,5 +44,25 @@ body {
     padding: 0;
     height: 100vh;
     width: 100%;
+    font-family: "M PLUS Rounded 1c", sans-serif;
 
+}
+
+.poll_questions ul{
+    list-style-type: none;
+
+
+}
+
+.container{
+    border: 2px solid #d096e3;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.04);
+}
+
+.navigation{
+    text-indent: 30px;
+    line-height: 160%
 }
