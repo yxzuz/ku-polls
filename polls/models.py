@@ -64,6 +64,7 @@ class Choice(models.Model):
         """Return string representation of Choice's model"""
         return str(self.choice_text) if self.choice_text is not None else ''
 
+
 class Vote(models.Model):
     """A vote by a user for a choice in a poll"""
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
