@@ -81,6 +81,19 @@ class DetailView(generic.DetailView):
             return redirect(reverse("polls:index"))
         return super(DetailView, self).get(request, *args, **kwargs)  # render the page
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get the context
+        context = super(DetailView, self).get_context_data(**kwargs)
+        question_id = self.get_object().id
+        my_user = self.request.user
+        check_previous_vote = my_user.vote_set.all().filter(choice__question__id=question_id)
+        if check_previous_vote:
+            first_vote = check_previous_vote[0]
+            picked_choice_id = first_vote.choice.pk
+            context['voted_choice'] = picked_choice_id
+
+        return context
+
 
 class ResultsView(generic.DetailView):
     """
