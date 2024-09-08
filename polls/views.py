@@ -8,10 +8,35 @@ from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.signals import user_logged_in, user_logged_out, user_login_failed
+from django.dispatch import receiver
 
 from .models import Question, Choice, Vote
 
 logger = logging.getLogger(__name__)
+def get_client_ip(request):
+    """Get the visitor’s IP address using request headers."""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+@receiver(user_logged_in)
+def log_user_login(sender, request, user, **kwargs):
+    """Log information when a user logs in."""
+    logger.info(f"User: {user.username} successfully login from IP address {get_client_ip(request)}")
+
+@receiver(user_logged_out)
+def log_user_logout(sender, request, user, **kwargs):
+    """Log information when a user logs out."""
+    logger.info(f"User: {user.username} logout from IP address {get_client_ip(request)}")
+
+@receiver((user_login_failed))
+def log_user_login_failed(sender,credentials, request, **kwargs):
+    """Log gives warning when user attempts to log in but failed."""
+    logger.warning(f"Failed login attempt for user: {credentials.get('username')} from IP address {get_client_ip(request)}")
 
 class IndexView(generic.ListView):
     """Take request to index.html which displays all questions."""
