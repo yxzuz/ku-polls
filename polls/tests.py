@@ -34,11 +34,39 @@ class QuestionModelTests(TestCase):
     def test_was_published_recently_with_future_question2(self):
         """
         was_published_recently() returns False for questions whose pub_date
-        is in the future (for 1 second).
+        is in the future (for 1 day and 1 second).
         """
         time = timezone.now() + datetime.timedelta(days=1, seconds=1)
         future_question = Question(pub_date=time)
         self.assertFalse(future_question.was_published_recently())
+
+    def test_can_vote_no_end_date(self):
+        """
+        Method can_vote() returns True if the end_date attribute does not exceed or is None.
+        Using questions with no end_date.
+        """
+        my_question = Question()
+        self.assertTrue(my_question.can_vote())
+        old = Question(pub_date=timezone.now()+datetime.timedelta(days=-1, seconds=1))
+        self.assertTrue(old.can_vote())
+        future = Question(pub_date=timezone.now()+datetime.timedelta(days=1, seconds=1))
+        self.assertFalse(future.can_vote())
+
+    def test_can_vote_end_date(self):
+        """
+        Method can_vote() returns True if the end_date attribute does not exceed or is None.
+        Using questions with end_date.
+        """
+        no_vote_q = Question(pub_date=timezone.now()+datetime.timedelta(days=-30),
+                             end_date=timezone.now()+datetime.timedelta(days=-1, seconds=1))
+        self.assertFalse(no_vote_q.can_vote())
+
+    def test_default_pub_date(self):
+        """
+        Testing when pub_date attribute was not inputted
+        """
+        question = Question.objects.create(question_text='default_pub')
+        self.assertTrue(question.is_published())
 
 
 def create_question(question_text, days):
@@ -113,12 +141,7 @@ class QuestionIndexViewTests(TestCase):
         question2 = Question(question_text="",pub_date=time)
         self.assertNotContains(response, [question.question_text,question2.question_text])
 
-    def test_default_pub_date(self):
-        """
-        Testing when pub_date attribute was not inputted
-        """
-        question = Question.objects.create(question_text='default_pub')
-        self.assertTrue(question.is_published())
+
 
 
 class QuestionDetailViewTests(TestCase):
@@ -141,13 +164,17 @@ class QuestionDetailViewTests(TestCase):
         response = self.client.get(reverse("polls:detail", args=(question.id,)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, question.question_text)
+        self.assertTemplateUsed(response, "polls/detail.html")
 
     def test_cannot_vote_after_end_date(self):
         """Cannot vote if the end_date is in the past."""
+        pub = timezone.now() + datetime.timedelta(days=-80)
         end_t = timezone.now() - datetime.timedelta(days=1, seconds=1)  # yesterday + 1 sec
-        question = Question.objects.create(question_text="Cannot vote",end_date=end_t)
+        question = Question.objects.create(question_text="Cannot vote", pub_date=pub, end_date=end_t)
         response = self.client.get(reverse("polls:detail", args=(question.id,)))
         self.assertFalse(question.can_vote())
+        # redirect (does not allow seeing details of a closed poll)
+        self.assertEqual(response.status_code, 302)
 
     def test_cannot_vote_before_pub_date(self):
         """
@@ -167,6 +194,7 @@ class QuestionDetailViewTests(TestCase):
         self.assertTrue(question.is_published())
         self.assertTrue(question.can_vote())
 
+
     def test_can_vote_no_end_date(self):
         """No end_date parameter was inputted but can vote"""
         question = Question.objects.create(question_text="Can_vote")
@@ -176,4 +204,3 @@ class QuestionDetailViewTests(TestCase):
         self.assertTrue(question2.can_vote())
         self.assertTrue(question.is_published())
         self.assertTrue(question.can_vote())
-
