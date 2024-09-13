@@ -66,3 +66,22 @@ body {
     text-indent: 30px;
     line-height: 160%
 }
+
+.login-body {
+    width: 300px;
+    color: purple ;
+    justify-content: center;
+    align-item: center;
+    padding: 20px;
+    margin: auto;
+    text-align: center;
+    font-family: "M PLUS Rounded 1c", sans-serif;
+    height: 500vh;
+
+}
+
+.login-container {
+    width: 300px;
+    padding: 20px;
+    text-align: center;
+}

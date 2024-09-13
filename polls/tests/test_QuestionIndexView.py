@@ -8,7 +8,7 @@ from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
 
-from polls.models import Question, User
+from polls.models import Question
 
 
 class QuestionIndexViewTests(TestCase):
@@ -62,6 +62,7 @@ class QuestionIndexViewTests(TestCase):
             response.context["latest_question_list"],
             [question2, question1],
         )
+
     def test_future_question2(self):
         """
         question with future pub date with is_published method
@@ -70,8 +71,9 @@ class QuestionIndexViewTests(TestCase):
         self.assertFalse(question.is_published())
         response = self.client.get(reverse('polls:index'))
         time = timezone.now() + datetime.timedelta(days=1, seconds=1)
-        question2 = Question(question_text="",pub_date=time)
-        self.assertNotContains(response, [question.question_text,question2.question_text])
+        question2 = Question(question_text="", pub_date=time)
+        self.assertNotContains(response, [question.question_text, question2.question_text])
+
 
 def create_question(question_text, days):
     """

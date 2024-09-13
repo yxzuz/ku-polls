@@ -10,6 +10,7 @@ from django.urls import reverse
 
 from polls.models import Question, User
 
+
 def create_question(question_text, days):
     """
     Create a question with the given `question_text` and published the
@@ -69,7 +70,6 @@ class QuestionDetailViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(question.is_published())
         self.assertTrue(question.can_vote())
-
 
     def test_can_vote_no_end_date(self):
         """No end_date parameter was inputted but can vote"""
