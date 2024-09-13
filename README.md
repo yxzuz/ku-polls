@@ -13,7 +13,35 @@ To be added. If the procedure is long, put it in the wiki or a separate file.
 
 ## Running the Application
 
-To be added.
+1. Activate the virtual environment
+    ```
+    # on Mac/Linux
+    source venv/bin/activate
+    
+    # on Window
+    venv\Scripts\activate 
+    ```
+2. Start Django Development server
+    ```
+   # Recommended python version >= 3.11
+    python manage.py runserver
+    ```
+If the port is not available, you can kill the port by following these steps:
+   ```
+   # Find the process using port 8000 on Mac/Linux
+   sudo lsof -i :8000
+   
+   #kill the port using PID
+   sudo kill -9 PID
+   ```
+   ```
+   # Find the process using port 8000 on Window
+   netstat -ano | findstr :8000
+   
+   #kill the port using PID
+   taskkill /PID PID /F
+   ```
+3. Access the server on your browser
 
 ## UI 
 To be added
