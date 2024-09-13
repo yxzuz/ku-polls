@@ -1,6 +1,6 @@
 ## KU Polls: Online Survey Questions 
 
-[![Django CI]([![Django CI](../../actions/workflows/django.yml/badge.svg)](../../actions/workflows/django.yml))
+[![Django CI](../../actions/workflows/django.yml/badge.svg)](../../actions/workflows/django.yml)
 
 An application to conduct online polls and surveys based
 on the [Django Tutorial project](https://docs.djangoproject.com/en/5.1/intro/tutorial01/), with
