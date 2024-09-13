@@ -1,19 +1,47 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'polls/style.css' %}">
+<head>
+    <style>
+
+        body {
+            width: 300px;
+            color: purple ;
+            justify-content: center;
+            align-item: center;
+            padding: 20px;
+            margin: auto;
+            text-align: center;
+            font-family: "M PLUS Rounded 1c", sans-serif;
+            height: 500vh;
+
+        }
+        .login-container {
+            width: 300px;
+            padding: 20px;
+            text-align: center;
+        }
+
+    </style>
+
+
+</head>
 <html>
 <body>
-<h2>Login</h2>
+    <div class="login-container">
 
-
-{% if messages %}
-    {% for msg in messages %}
-        <p class="{{ msg.tags }}">{{ msg }}</p>
-    {% endfor %}
-{% endif %}
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-  <input type="hidden" name="next" value="{{next}}"/>
- </form>
- {# If you have a sign-up page, then add a link here #}
+    <h2>Login</h2>
+    {% if messages %}
+        {% for msg in messages %}
+            <p class="{{ msg.tags }}">{{ msg }}</p>
+        {% endfor %}
+    {% endif %}
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+      <input type="hidden" name="next" value="{{next}}"/>
+     </form>
+     {# If you have a sign-up page, then add a link here #}
+    </div>
 </body>
 </html>
