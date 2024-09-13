@@ -1,5 +1,7 @@
 ## KU Polls: Online Survey Questions 
 
+[![Django CI]([![Django CI](../../actions/workflows/django.yml/badge.svg)](../../actions/workflows/django.yml))
+
 An application to conduct online polls and surveys based
 on the [Django Tutorial project](https://docs.djangoproject.com/en/5.1/intro/tutorial01/), with
 additional features.
@@ -41,10 +43,22 @@ If the port is not available, you can kill the port by following these steps:
    #kill the port using PID
    taskkill /PID PID /F
    ```
-3. Access the server on your browser
+3. Access the server on your browser http://127.0.0.1:8000/
 
 ## UI 
 To be added
+
+## Admin
+| Username | Password  |
+|----------|-----------|
+| admin    | hackme123 |
+
+## Demo Users
+| Username | Password |
+|----------|----------|
+| demo1    | hackme11 |
+| demo2    | hackme22 |
+| demo3    | hackme33 |
 
 ## Project Documents
 
