@@ -18,8 +18,8 @@
 </fieldset>
     <div class="navigation">
     <input type="submit" value="Vote" style="background-color: #d096e3; color: white; border-radius: 15px;border-color: #aa5cc4">
-    <a href="{% url 'polls:index' %}">Back to List of Polls</a>
-    <a href="{% url 'polls:results' question.id %}">Results</a>
+    <a href="{% url 'polls:index' %}" style="color:#e35fbb;">Back to List of Polls</a>
+    <a href="{% url 'polls:results' question.id %}" style="color:#af67c7;">Results</a>
         </div>
 </form>
 {% endblock content %}
