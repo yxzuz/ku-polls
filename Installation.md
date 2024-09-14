@@ -13,12 +13,12 @@
     ```
     python3 -m venv env
     ```
-5. Activate virtual environment    
+5. Activate virtual environment
    ```
-   # on Mac/Linux
-    source env/bin/activate
+   # On Mac/Linux
+   source env/bin/activate
    
-   # on Window
+   # On Window
    env\Scripts\activate
    ```
 6. Install requirements.txt
@@ -34,7 +34,14 @@
    # On Window
    copy sample.env .env
    ```
-8. Replace SECRET_KEY with your own value provided in mysite/settings.py
+8. Replace SECRET_KEY with your own value
+   ```
+   # doing this in Python Shell
+   from django.core.management.utils import get_random_secret_key
+   
+   # copy this value and replace SECRET_KEY in .env file
+   print(get_random_secret_key())
+   ```
 9. Run Migrations
     ```
     python manage.py migrate
