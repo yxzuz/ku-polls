@@ -170,13 +170,13 @@ def vote(request, question_id):
             vote.choice = selected_choice
             vote.save()
             messages.success(request,
-                             f"Your vote was changed to {selected_choice.choice_text}")
+                             f"You changed your vote to {selected_choice.choice_text}.")
     except Vote.DoesNotExist:
         # does not have a vote yet
         # automatically saved
         Vote.objects.create(user=my_user, choice=selected_choice)
         messages.success(request,
-                         f"You voted for {selected_choice.choice_text}")
+                         f"You voted for {selected_choice.choice_text}.")
 
     # After voted redirects to the "results" page for the question
     return HttpResponseRedirect(reverse("polls:results", args=(question.id,)))
