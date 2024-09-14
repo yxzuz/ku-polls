@@ -3,8 +3,8 @@
   "model": "auth.user",
   "pk": 1,
   "fields": {
-    "password": "pbkdf2_sha256$870000$y2Nmtm7RwMrtHMR1iE99Gb$R56AHVHDcmKGSxH8yiZ+D2PFj1TI2B0Nx/JWE820LPA=",
-    "last_login": "2024-09-07T15:16:17.225Z",
+    "password": "pbkdf2_sha256$870000$66H6SJedY6Ilm51u2FyBQV$2GohtaANaYrYa+3mvMHg4o6f01IqaTqH4q4xIn+R5dY=",
+    "last_login": "2024-09-13T16:43:32.954Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
@@ -40,7 +40,7 @@
   "pk": 3,
   "fields": {
     "password": "pbkdf2_sha256$870000$w1lGDdka7rsh7yGqAR2VEu$kV3TplfWdAyrij+Ny2MlrVRzyfJtvj6Ar8t8imMEmO8=",
-    "last_login": "2024-09-08T12:36:56.989Z",
+    "last_login": "2024-09-13T09:53:59.232Z",
     "is_superuser": false,
     "username": "zayne",
     "first_name": "",
