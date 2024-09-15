@@ -9,6 +9,10 @@ additional features.
 This app was created as part of the [Individual Software Process](
 https://cpske.github.io/ISP) course at [Kasetsart University](https://www.ku.ac.th).
 
+## Requirements
+
+Recommend python 3.11 and see the [requirements](./requirements.txt) 
+
 ## Installation
 
 Follow this instruction: [Installation](./Installation.md)
@@ -46,7 +50,10 @@ If the port is not available, you can kill the port by following these steps:
 3. Access the server on your browser http://127.0.0.1:8000/
 
 ## UI 
-To be added
+<img src="wiki_images/login_page.png" width="600">
+<img src="wiki_images/index_page.png" width="600">
+<img src="wiki_images/details_page.png" width="600">
+<img src="wiki_images/results_page.png" width="600">
 
 ## Admin
 | Username | Password  |
@@ -70,8 +77,10 @@ All project documents are in the [Project Wiki](../../wiki/Home).
 - [Iteration 1](../../wiki/Iteration-1-Plan)
 - [Iteration 2](../../wiki/Iteration-2-Plan)
 - [Iteration 3](../../wiki/Iteration-3-Plan)
+- [Iteration 4](../../wiki/Iteration-4-Plan)
 
 ## Task Board 
 - [Iteration 1](https://github.com/users/yxzuz/projects/1/views/1)
 - [Iteration 2](https://github.com/users/yxzuz/projects/1/views/3)
 - [Iteration 3](https://github.com/users/yxzuz/projects/1/views/12)
+- [Iteration 4](https://github.com/users/yxzuz/projects/1/views/13)
