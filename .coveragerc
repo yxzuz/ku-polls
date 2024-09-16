@@ -1,0 +1,22 @@
+[run]
+# Measure branch coverage
+branch = True
+
+# Don't measure Python standard library (default behavior)
+cover_pylib = False
+
+# Omit files and directories that are not relevant
+omit =
+    */migrations/*    # Omit Django migration files
+    */tests/*         # Omit unit test files and directories
+    mysite/*          # Omit Django project configuration files
+    /usr/*            # Linux location of Python libraries (adjust for macOS if needed)
+    */env/*           # Virtual environment directory (if using a different name or path)
+
+
+[report]
+# Exclude some methods from the coverage report
+exclude_lines =
+    def __str__       # Exclude __str__ methods
+    def __repr__      # Exclude __repr__ methods
+
