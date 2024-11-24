@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  db:
+    image: "postgres:17" # use postgres ver 17
+    environment:
+      POSTGRES_USER: "${DATABASE_USER}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD}"
+      POSTGRES_DB: "${DATABASE_NAME}"
+    volumes:
+      - ./db:/var/lib/postgresql/data
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"
+      ]
+      start_period: 10s
+      interval: 5s # how long each test take
+      timeout: 5s
+      retries: 5 # do until failing
+    restart: always
+
+
+  app:
+    build:
+      context: .
+      args:
+        SECRET_KEY: "${SECRET_KEY?:SECRET_KEY not set}"
+    env_file: .env
+    environment:
+      DEBUG: "${DEBUG}"
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+    depends_on:
+      db:
+          condition: service_healthy
+    ports:
+      - '8000:8000'
+    deploy:
+      resources:
+        limits:
+          memory: 256mb
