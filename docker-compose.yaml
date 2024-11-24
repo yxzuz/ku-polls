@@ -24,7 +24,7 @@ services:
     build:
       context: .
       args:
-        SECRET_KEY: "${SECRET_KEY?:SECRET_KEY not set}"
+        SECRET_KEY: "${SECRET_KEY}"
     env_file: docker.env
     environment:
       DEBUG: "${DEBUG}"
