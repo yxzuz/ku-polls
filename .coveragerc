@@ -12,6 +12,7 @@ omit =
     mysite/*          # Omit Django project configuration files
     /usr/*            # Linux location of Python libraries (adjust for macOS if needed)
     */env/*           # Virtual environment directory (if using a different name or path)
+    manage.py
 
 
 [report]
